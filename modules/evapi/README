@@ -34,6 +34,7 @@ Daniel-Constantin Mierla
               4.1. evapi_relay(evdata)
               4.2. evapi_async_relay(evdata)
               4.3. evapi_close()
+              4.4. evapi_set_tag(tname)
 
         5. Event routes
 
@@ -51,7 +52,8 @@ Daniel-Constantin Mierla
    1.4. evapi_relay usage
    1.5. TCP message
    1.6. evapi_async_relay usage
-   1.7. evapi_evapi usage
+   1.7. evapi_close usage
+   1.8. evapi_set_tag usage
 
 Chapter 1. Admin Guide
 
@@ -74,6 +76,7 @@ Chapter 1. Admin Guide
         4.1. evapi_relay(evdata)
         4.2. evapi_async_relay(evdata)
         4.3. evapi_close()
+        4.4. evapi_set_tag(tname)
 
    5. Event routes
 
@@ -157,6 +160,7 @@ modparam("evapi", "netstring_format", 0)
    4.1. evapi_relay(evdata)
    4.2. evapi_async_relay(evdata)
    4.3. evapi_close()
+   4.4. evapi_set_tag(tname)
 
 4.1. evapi_relay(evdata)
 
@@ -216,11 +220,29 @@ evapi_async_relay("{ \"event\": \"suspend\",\n \"data\":"
 
    This function can be used from ANY_ROUTE.
 
-   Example 1.7. evapi_evapi usage
+   Example 1.7. evapi_close usage
 ...
 event_route[evapi:connection-new] {
   if($evapi(srcaddr)!="127.0.0.1") {
     evapi_close();
+    exit;
+  }
+}
+...
+
+4.4. evapi_set_tag(tname)
+
+   Set tag name for current client connection. The parameters has to be a
+   string up to 64 characters. It can also be a variable holding such
+   string.
+
+   This function can be used from ANY_ROUTE.
+
+   Example 1.8. evapi_set_tag usage
+...
+event_route[evapi:connection-new] {
+  if($evapi(srcaddr)=="127.0.0.1") {
+    evapi_set_tag("local");
     exit;
   }
 }
